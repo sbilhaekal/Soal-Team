@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoEvent - Daftar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.prinsh.com/NathanPrinsley-textstyle/nprinsh-stext.css"/>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">🎟NeoEvent</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">Beranda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="event.html">Event</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.html">Daftar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="kontak.html">Kontak</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container my-5">
+        <h2 class="text-center mb-4">Form Pendaftaran</h2>
+        <form id="registrationForm" class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Nama Lengkap</label>
+                <input type="text" class="form-control" id="nama" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Pilih Event</label>
+                <select class="form-select" id="event" required>
+                    <option value="">Pilih Event...</option>
+                    ${events.map(e => `<option value="${e.id}">${e.title}</option>`).join('')}
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Jumlah Tiket</label>
+                <input type="number" class="form-control" id="tiket" min="1" value="1" required>
+            </div>
+            <div class="col-12">
+                <h5>Total Harga: <span id="totalHarga">Rp75.000</span></h5>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Daftar Sekarang</button>
+            </div>
+        </form>
+    </div>
+    
+    <script>
+        const hargaPerTiket = 75000;
+        const tiketInput = document.getElementById('tiket');
+        const totalHarga = document.getElementById('totalHarga');
+    
+        tiketInput.addEventListener('input', updateHarga);
+        
+        function updateHarga() {
+            const jumlah = tiketInput.value || 0;
+            totalHarga.textContent = `Rp${(jumlah * hargaPerTiket).toLocaleString()}`;
+        }
+    
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!this.checkValidity()) {
+                alert('Harap isi semua field yang wajib diisi!');
+                return;
+            }
+    
+            const registrationData = {
+                nama: document.getElementById('nama').value,
+                email: document.getElementById('email').value,
+                event: document.getElementById('event').value,
+                tiket: document.getElementById('tiket').value,
+                total: tiketInput.value * hargaPerTiket
+            };
+    
+            localStorage.setItem('neoEventRegistration', JSON.stringify(registrationData));
+            window.location.href = 'summary.html';
+        });
+    </script>
+    
+</body>
+</html>
